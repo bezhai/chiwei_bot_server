@@ -19,6 +19,7 @@ resources:
       runtime: custom.debian10
       memorySize: 1024
       timeout: 600
+      logConfig: auto
       layers:
         - acs:fc:${vars.region}:official:layers/Nodejs18/versions/3
       environmentVariables:
@@ -29,21 +30,21 @@ resources:
         LARK_APP_SECRET: ${env(LARK_APP_SECRET)}
         MONGO_INITDB_ROOT_PASSWORD: ${env(MONGO_INITDB_ROOT_PASSWORD)}
         MONGO_INITDB_ROOT_USERNAME: ${env(MONGO_INITDB_ROOT_USERNAME)}
-        MONGO_SERVER_IP: ${env(MONGO_SERVER_IP)}
+        MONGO_HOST: ${env(MONGO_HOST)}
         OSS_ACCESS_KEY_ID: ${env(OSS_ACCESS_KEY_ID)}
         OSS_ACCESS_KEY_SECRET: ${env(OSS_ACCESS_KEY_SECRET)}
         OSS_BUCKET: ${env(OSS_BUCKET)}
         REDIS_PASSWORD: ${env(REDIS_PASSWORD)}
-        REDIS_SERVER_IP: ${env(REDIS_SERVER_IP)}
+        REDIS_HOST: ${env(REDIS_HOST)}
         HTTP_SECRET: ${env(HTTP_SECRET)}
         HTTP_JWT_KEY: ${env(HTTP_JWT_KEY)}
         MYSQL_ROOT_PASSWORD: ${env(MYSQL_ROOT_PASSWORD)}
-        MYSQL_SERVER_IP: ${env(MYSQL_SERVER_IP)}
+        MYSQL_HOST: ${env(MYSQL_HOST)}
         MYSQL_DBNAME: ${env(MYSQL_DBNAME)}
       customRuntimeConfig:
         command:
           - ./bootstrap
-        port: 3000
+        port: 8888
       functionName: ${vars.functionName}
       code: ./code
       triggers:
