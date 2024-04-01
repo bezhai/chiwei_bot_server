@@ -9,6 +9,8 @@ import { MysqlModule } from './database/mysql/mysql.module';
 import { SettingModule } from './setting/setting.module';
 import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import { MongodbModule } from './database/mongodb/mongodb.module';
+import { ImageStoreModule } from './image-store/image-store.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor';
     UsersModule,
     MysqlModule,
     SettingModule,
+    MongodbModule,
+    ImageStoreModule,
   ],
   controllers: [AppController],
   providers: [

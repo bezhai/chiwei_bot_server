@@ -1,4 +1,4 @@
 export interface Payload {
-  sub: number;
-  username: string;
+  readonly sub: number;
+  readonly username: string;
 }
