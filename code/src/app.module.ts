@@ -9,6 +9,14 @@ import { MysqlModule } from './database/mysql/mysql.module';
 import { SettingModule } from './setting/setting.module';
 import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import { MongodbModule } from './database/mongodb/mongodb.module';
+import { ImageStoreModule } from './image-store/image-store.module';
+import { DownloadTaskModule } from './download-task/download-task.module';
+import { CommonModule } from './common/common.module';
+import { ProxyModule } from './proxy/proxy.module';
+import { OssModule } from './database/oss/oss.module';
+import { LarkModule } from './lark/lark.module';
+import { TranslationModule } from './translation/translation.module';
 
 @Module({
   imports: [
@@ -20,6 +28,14 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor';
     UsersModule,
     MysqlModule,
     SettingModule,
+    MongodbModule,
+    ImageStoreModule,
+    DownloadTaskModule,
+    CommonModule,
+    ProxyModule,
+    OssModule,
+    LarkModule,
+    TranslationModule,
   ],
   controllers: [AppController],
   providers: [

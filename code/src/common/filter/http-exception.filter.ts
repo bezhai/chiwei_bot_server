@@ -13,9 +13,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    response.status(exception.getStatus()).json({
-      code: ErrorCode.UNAUTHORIZED,
-      msg: exception.message || 'Unauthorized',
-    });
+    if (exception.message === 'Token has expired') {
+      // 令牌过期需要单独判断
+      response.status(exception.getStatus()).json({
+        code: ErrorCode.USER_TOKEN_EXPIRED,
+        msg: 'Token is expired',
+      });
+    } else {
+      response.status(exception.getStatus()).json({
+        code: ErrorCode.UNAUTHORIZED,
+        msg: exception.message || 'Unauthorized',
+      });
+    }
   }
 }

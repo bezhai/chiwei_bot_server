@@ -1,27 +1,35 @@
 import {
   Body,
   Controller,
-  HttpCode,
   HttpStatus,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginUserDto, RefreshTokenDto } from './dto/login.dto';
+import {
+  LoginUserDto,
+  RefreshTokenDto,
+  RegisterUserDto,
+} from './dto/login.dto';
 import { ErrorCode } from 'src/common/consts/error-codes';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LoginResponse } from './responses/login.reponses';
+import { RefreshResponse } from './responses/refresh.responses';
 
+@ApiTags('auth')
 @Controller('/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('/login')
-  async signIn(@Body() signInDto: LoginUserDto) {
+  @ApiOperation({ summary: '用户登录' })
+  async signIn(@Body() signInDto: LoginUserDto): Promise<LoginResponse> {
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
-  @Post('refresh')
-  async refresh(@Body() refreshDto: RefreshTokenDto): Promise<any> {
+  @Post('/refresh')
+  @ApiOperation({ summary: '刷新token' })
+  async refresh(@Body() refreshDto: RefreshTokenDto): Promise<RefreshResponse> {
     try {
       const refreshToken = refreshDto.refresh_token;
 
@@ -42,5 +50,11 @@ export class AuthController {
         statusCode: HttpStatus.UNAUTHORIZED,
       });
     }
+  }
+
+  @Post('/register')
+  @ApiOperation({ summary: '用户注册' })
+  async register(@Body() registerDto: RegisterUserDto): Promise<any> {
+    return this.authService.register(registerDto);
   }
 }

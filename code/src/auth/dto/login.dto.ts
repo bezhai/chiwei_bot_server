@@ -2,13 +2,24 @@ import { IsNotEmpty } from 'class-validator';
 
 export class LoginUserDto {
   @IsNotEmpty()
-  username: string;
+  readonly username: string;
 
   @IsNotEmpty()
-  password: string;
+  readonly password: string;
 }
 
 export class RefreshTokenDto {
   @IsNotEmpty()
-  refresh_token: string;
+  readonly refresh_token: string;
+}
+
+export class RegisterUserDto {
+  @IsNotEmpty()
+  readonly username: string;
+
+  @IsNotEmpty()
+  readonly password: string;
+
+  // @IsNotEmpty()
+  // readonly email: string;
 }

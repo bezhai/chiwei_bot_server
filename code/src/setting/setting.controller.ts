@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { SettingService } from './setting.service';
 import { SettingDto, SettingListDto } from './dto/setting.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { WrapResponse } from 'src/common/decorator/wrap-response.decorator';
+import { JwtGuard } from 'src/common/decorator/jwt.decorator';
 
-@UseGuards(AuthGuard('jwt'))
+@JwtGuard()
 @Controller('setting')
 export class SettingController {
   constructor(private readonly settingService: SettingService) {}
@@ -22,7 +22,7 @@ export class SettingController {
 
   @Get('array')
   @WrapResponse('value')
-  async getArrsySetting(@Query('key') key: string) {
+  async getArraySetting(@Query('key') key: string) {
     return await this.settingService.smember(key);
   }
 
