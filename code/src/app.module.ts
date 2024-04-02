@@ -11,6 +11,7 @@ import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { MongodbModule } from './database/mongodb/mongodb.module';
 import { ImageStoreModule } from './image-store/image-store.module';
+import { DownloadTaskModule } from './download-task/download-task.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ImageStoreModule } from './image-store/image-store.module';
     SettingModule,
     MongodbModule,
     ImageStoreModule,
+    DownloadTaskModule,
   ],
   controllers: [AppController],
   providers: [

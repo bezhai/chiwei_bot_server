@@ -3,15 +3,15 @@ import { HydratedDocument } from 'mongoose';
 
 export type DownloadTaskDocument = HydratedDocument<DownloadTask>;
 
-@Schema()
+@Schema({ collection: 'download_task' })
 export class DownloadTask {
-  @Prop()
+  @Prop({ required: true })
   illust_id: string;
 
   @Prop()
   r18_index: number;
 
-  @Prop()
+  @Prop({ required: true })
   status: number;
 
   @Prop()
