@@ -22,7 +22,7 @@ export class SettingController {
 
   @Get('array')
   @WrapResponse('value')
-  async getArrsySetting(@Query('key') key: string) {
+  async getArraySetting(@Query('key') key: string) {
     return await this.settingService.smember(key);
   }
 

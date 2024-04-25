@@ -12,6 +12,7 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { MongodbModule } from './database/mongodb/mongodb.module';
 import { ImageStoreModule } from './image-store/image-store.module';
 import { DownloadTaskModule } from './download-task/download-task.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DownloadTaskModule } from './download-task/download-task.module';
     MongodbModule,
     ImageStoreModule,
     DownloadTaskModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [
