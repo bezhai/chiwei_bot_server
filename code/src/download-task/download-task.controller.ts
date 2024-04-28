@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { DownloadTaskService } from './download-task.service';
-import { CreateDownloadTaskDto } from './dto/download-task.dto';
-import { ServerAuthGuard } from 'src/common/guard/server-auth.guard';
+import {
+  CreateDownloadTaskDto,
+  PaginationQueryDownloadTaskDto,
+} from './dto/download-task.dto';
 import { TokenAuth } from 'src/common/decorator/auth.decorator';
 
 @Controller('download-task')
@@ -9,8 +11,8 @@ export class DownloadTaskController {
   constructor(private readonly downloadTaskService: DownloadTaskService) {}
 
   @Get()
-  async findAll() {
-    return this.downloadTaskService.findAll();
+  async findAll(@Query() query: PaginationQueryDownloadTaskDto) {
+    return this.downloadTaskService.findAll(query);
   }
 
   @Get(':illust_id')

@@ -13,6 +13,7 @@ import { MongodbModule } from './database/mongodb/mongodb.module';
 import { ImageStoreModule } from './image-store/image-store.module';
 import { DownloadTaskModule } from './download-task/download-task.module';
 import { CommonModule } from './common/common.module';
+import { ProxyModule } from './proxy/proxy.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CommonModule } from './common/common.module';
     ImageStoreModule,
     DownloadTaskModule,
     CommonModule,
+    ProxyModule,
   ],
   controllers: [AppController],
   providers: [

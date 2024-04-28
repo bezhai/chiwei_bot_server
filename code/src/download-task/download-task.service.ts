@@ -2,8 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DownloadTask } from './schemas/download-task.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateDownloadTaskDto } from './dto/download-task.dto';
+import {
+  CreateDownloadTaskDto,
+  PaginationQueryDownloadTaskDto,
+} from './dto/download-task.dto';
 import { DownloadTaskStatus } from './enums/download-task-status.enum';
+import { PaginationResponse } from 'src/common/responses/pagination-response';
 
 @Injectable()
 export class DownloadTaskService {
@@ -12,8 +16,22 @@ export class DownloadTaskService {
     private downloadTaskModel: Model<DownloadTask>,
   ) {}
 
-  async findAll(): Promise<DownloadTask[]> {
-    return this.downloadTaskModel.find().exec();
+  async findAll(
+    query: PaginationQueryDownloadTaskDto,
+  ): Promise<PaginationResponse<DownloadTask>> {
+    const { skip, page_size } = query;
+    const total = await this.downloadTaskModel.countDocuments().exec();
+    const data = await this.downloadTaskModel
+      .find()
+      .skip(skip)
+      .limit(page_size)
+      .exec();
+    return new PaginationResponse({
+      total,
+      page: query.page,
+      page_size: query.page_size,
+      data,
+    });
   }
 
   async findOne(illust_id: string): Promise<DownloadTask | null> {
