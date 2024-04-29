@@ -14,6 +14,7 @@ import { ImageStoreModule } from './image-store/image-store.module';
 import { DownloadTaskModule } from './download-task/download-task.module';
 import { CommonModule } from './common/common.module';
 import { ProxyModule } from './proxy/proxy.module';
+import { OssModule } from './database/oss/oss.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ProxyModule } from './proxy/proxy.module';
     DownloadTaskModule,
     CommonModule,
     ProxyModule,
+    OssModule,
   ],
   controllers: [AppController],
   providers: [

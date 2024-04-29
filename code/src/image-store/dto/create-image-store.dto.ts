@@ -1,1 +1,3 @@
-export class CreateImageStoreDto {}
+export class CreateImageStoreDto {
+  illust_id: string;
+}

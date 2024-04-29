@@ -10,8 +10,10 @@ import {
 import { ImageStoreService } from './image-store.service';
 import { CreateImageStoreDto } from './dto/create-image-store.dto';
 import { UpdateImageStoreDto } from './dto/update-image-store.dto';
+import { DownloadImageDto } from './dto/download-image.dto';
+import { TokenAuth } from 'src/common/decorator/auth.decorator';
 
-@Controller('image-store')
+@Controller('/image-store')
 export class ImageStoreController {
   constructor(private readonly imageStoreService: ImageStoreService) {}
 
@@ -41,5 +43,11 @@ export class ImageStoreController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.imageStoreService.remove(+id);
+  }
+
+  @TokenAuth()
+  @Post('/download')
+  async downloadImage(@Body() downloadImageDto: DownloadImageDto) {
+    return this.imageStoreService.downloadImage(downloadImageDto.pixiv_url);
   }
 }

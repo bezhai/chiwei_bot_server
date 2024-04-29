@@ -25,6 +25,7 @@ export class DownloadTaskService {
       .find()
       .skip(skip)
       .limit(page_size)
+      .sort({ _id: -1 })
       .exec();
     return new PaginationResponse({
       total,

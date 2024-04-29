@@ -8,5 +8,6 @@ import { RedisModule } from '@nestjs-modules/ioredis';
   imports: [HttpModule, RedisModule],
   controllers: [ProxyController],
   providers: [ProxyService],
+  exports: [ProxyService],
 })
 export class ProxyModule {}

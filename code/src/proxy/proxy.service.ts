@@ -11,7 +11,7 @@ export class ProxyService {
     @InjectRedis() private readonly redis: Redis,
   ) {}
 
-  async proxyRequest(proxyRequestDto: ProxyRequestDto): Promise<any> {
+  private async buildHeaders(proxyRequestDto: ProxyRequestDto): Promise<any> {
     const headers = {
       'user-agent': await this.getValueFromRedis('user-agent'),
       referer: proxyRequestDto.referer,
@@ -21,6 +21,11 @@ export class ProxyService {
       'sec-ch-ua-platform': 'macOS',
       ...proxyRequestDto.headers,
     };
+    return headers;
+  }
+
+  async proxyRequest(proxyRequestDto: ProxyRequestDto): Promise<any> {
+    const headers = await this.buildHeaders(proxyRequestDto);
 
     const response = await this.httpService
       .get(proxyRequestDto.url, { headers })
@@ -30,6 +35,18 @@ export class ProxyService {
       body: response.data,
       headers: response.headers,
     };
+  }
+
+  async proxyRequestBuffer(proxyRequestDto: ProxyRequestDto): Promise<Buffer> {
+    const headers = await this.buildHeaders(proxyRequestDto);
+
+    const response = await this.httpService
+      .get(proxyRequestDto.url, { headers, responseType: 'arraybuffer' })
+      .toPromise();
+
+    const imageBuffer = Buffer.from(response.data);
+
+    return imageBuffer;
   }
 
   private async getValueFromRedis(key: string): Promise<string> {
