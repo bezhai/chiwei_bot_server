@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@larksuiteoapi/node-sdk": "^1.28.0",
     "@nestjs-modules/ioredis": "^2.0.2",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
@@ -31,6 +32,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
+    "@types/sharp": "^0.32.0",
     "ali-oss": "^6.20.0",
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
@@ -44,6 +46,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "sharp": "^0.33.3",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

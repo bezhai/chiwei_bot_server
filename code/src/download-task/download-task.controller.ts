@@ -6,6 +6,7 @@ import {
 } from './dto/download-task.dto';
 import { TokenAuth } from 'src/common/decorator/auth.decorator';
 
+@TokenAuth()
 @Controller('download-task')
 export class DownloadTaskController {
   constructor(private readonly downloadTaskService: DownloadTaskService) {}
@@ -25,7 +26,6 @@ export class DownloadTaskController {
     return this.downloadTaskService.create(createDownloadTaskDto);
   }
 
-  @TokenAuth()
   @Post('token-auth')
   async create_with_token(
     @Body() createDownloadTaskDto: CreateDownloadTaskDto,

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as OSS from 'ali-oss';
+import { OssService } from './oss.service';
 
 @Module({
   providers: [
     {
       provide: 'OSS_CLIENT_INTERNAL',
       useFactory: async (configService: ConfigService) => {
-        return new OSS({
+        return new OssService({
           endpoint: configService.get<string>('INTERNAL_END_POINT'),
           accessKeyId: configService.get<string>('OSS_ACCESS_KEY_ID', ''),
           accessKeySecret: configService.get<string>(
@@ -22,7 +22,7 @@ import * as OSS from 'ali-oss';
     {
       provide: 'OSS_CLIENT_EXTERNAL',
       useFactory: async (configService: ConfigService) => {
-        return new OSS({
+        return new OssService({
           endpoint: configService.get<string>('END_POINT'),
           accessKeyId: configService.get<string>('OSS_ACCESS_KEY_ID', ''),
           accessKeySecret: configService.get<string>(

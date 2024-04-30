@@ -15,6 +15,8 @@ import { DownloadTaskModule } from './download-task/download-task.module';
 import { CommonModule } from './common/common.module';
 import { ProxyModule } from './proxy/proxy.module';
 import { OssModule } from './database/oss/oss.module';
+import { LarkModule } from './lark/lark.module';
+import { TranslationModule } from './translation/translation.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { OssModule } from './database/oss/oss.module';
     CommonModule,
     ProxyModule,
     OssModule,
+    LarkModule,
+    TranslationModule,
   ],
   controllers: [AppController],
   providers: [

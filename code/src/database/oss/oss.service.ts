@@ -9,10 +9,41 @@ export class OssService {
     this.client = new OSS(config);
   }
 
-  async uploadFile(file: any): Promise<any> {
-    const result = await this.client.put(file.name, file.data);
-    return result;
+  async uploadFile(fileName: string, file: any): Promise<OSS.PutObjectResult> {
+    return this.client.put(fileName, file);
   }
 
-  // 其他需要的OSS操作方法...
+  async getFile(fileName: string): Promise<OSS.GetObjectResult> {
+    return this.client.get(fileName);
+  }
+
+  async deleteFile(fileName: string): Promise<OSS.DeleteResult> {
+    return this.client.delete(fileName);
+  }
+
+  async getFileUrl(
+    fileName: string,
+    isForDownload: boolean = false,
+  ): Promise<string> {
+    const options: OSS.SignatureUrlOptions = { expires: 2 * 60 * 60 };
+    const pixivAddr = fileName.split('/').pop();
+    if (!pixivAddr) {
+      return '';
+    }
+    const headerResponse = await this.client.head(fileName);
+    const contentLength = Number(
+      (headerResponse.res.headers as { 'content-length': string })[
+        'content-length'
+      ],
+    );
+    if (isForDownload) {
+      options.response = {};
+      options.response['content-disposition'] =
+        `attachment; filename=${pixivAddr}`;
+    } else if (contentLength < 1024 * 1024 * 20) {
+      // 过大图片展示的时候无法加样式
+      options.process = 'style/sort_image';
+    }
+    return this.client.signatureUrl(fileName, options);
+  }
 }

@@ -21,12 +21,6 @@ export class ServerAuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const method = request.method;
-
-    // 对于 GET 请求，直接放行
-    if (method === 'GET') {
-      return true;
-    }
 
     const salt = request.headers['x-salt'];
     const clientToken = request.headers['x-token'];

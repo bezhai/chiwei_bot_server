@@ -20,7 +20,7 @@ export class AuthController {
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
-  @Post('refresh')
+  @Post('/refresh')
   async refresh(@Body() refreshDto: RefreshTokenDto): Promise<any> {
     try {
       const refreshToken = refreshDto.refresh_token;

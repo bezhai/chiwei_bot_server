@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PixivImage, PixivImageSchema } from './schemas/pixiv-image.schemas';
 import { OssModule } from 'src/database/oss/oss.module';
 import { ProxyModule } from 'src/proxy/proxy.module';
+import { LarkModule } from 'src/lark/lark.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ProxyModule } from 'src/proxy/proxy.module';
     ]),
     OssModule,
     ProxyModule,
+    LarkModule,
   ],
   controllers: [ImageStoreController],
   providers: [ImageStoreService],

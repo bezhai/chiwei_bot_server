@@ -1,7 +1,7 @@
 export class PaginationResponse<T> {
   total: number;
-  page: number;
-  page_size: number;
+  page?: number;
+  page_size?: number;
   data: T[];
 
   constructor(partial: Partial<PaginationResponse<T>>) {
