@@ -11,11 +11,11 @@ import { Response } from 'express';
 import { ProxyRequestDto } from './dto/proxy-request.dto';
 import { TokenAuth } from 'src/common/decorator/auth.decorator';
 
+@TokenAuth()
 @Controller('proxy')
 export class ProxyController {
   constructor(private readonly proxyService: ProxyService) {}
 
-  @TokenAuth()
   @Post()
   @HttpCode(HttpStatus.OK)
   async proxy(@Body() proxyRequestDto: ProxyRequestDto, @Res() res: Response) {

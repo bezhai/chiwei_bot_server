@@ -6,7 +6,7 @@ import {
 } from './dto/translation.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { TranslateWord } from './schemas/translation.schemas';
-import { FilterQuery, Model, Promise } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 
 @Injectable()

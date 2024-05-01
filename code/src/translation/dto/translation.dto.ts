@@ -25,6 +25,7 @@ export class DeleteTranslationDto {
 
 export class ListTranslationDto {
   @IsString()
+  @IsOptional()
   search_key?: string;
 
   @IsInt()

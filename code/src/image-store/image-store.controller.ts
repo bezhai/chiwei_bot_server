@@ -17,6 +17,7 @@ import { UploadImageToLarkDto } from './dto/upload-image.dto';
 import { ListPixivImageDto } from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import { PixivImageWithUrl } from './responses/image-store.responses';
+import { JwtGuard } from 'src/common/decorator/jwt.decorator';
 
 @Controller('/image-store')
 export class ImageStoreController {
@@ -28,7 +29,7 @@ export class ImageStoreController {
     return this.imageStoreService.create(createImageStoreDto);
   }
 
-  @TokenAuth()
+  @JwtGuard()
   @Get()
   findAll(
     @Query() listPixivImageDto: ListPixivImageDto,
