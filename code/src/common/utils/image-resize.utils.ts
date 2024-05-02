@@ -35,6 +35,6 @@ export async function resizeImage(
       imgHeight: outputMetadata.height || 0,
     };
   } catch (err) {
-    throw new Error(`Error resizing image: ${err.message}`);
+    throw new Error(`Error resizing image: ${(err as Error).message}`);
   }
 }

@@ -32,8 +32,8 @@ export class ProxyService {
       .toPromise();
 
     return {
-      body: response.data,
-      headers: response.headers,
+      body: response?.data,
+      headers: response?.headers,
     };
   }
 
@@ -44,7 +44,7 @@ export class ProxyService {
       .get(proxyRequestDto.url, { headers, responseType: 'arraybuffer' })
       .toPromise();
 
-    const imageBuffer = Buffer.from(response.data);
+    const imageBuffer = Buffer.from(response?.data);
 
     return imageBuffer;
   }
