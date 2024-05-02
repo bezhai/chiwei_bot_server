@@ -39,7 +39,7 @@ export class AuthService {
       throw new CustomHttpException(
         ErrorCode.UNAUTHORIZED,
         'user info error',
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.BAD_REQUEST,
       );
     }
     const accessPayload: TokenPayload = {
