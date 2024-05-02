@@ -63,8 +63,7 @@ export class TranslationService {
 
     query
       .skip((listTranslationDto.page - 1) * listTranslationDto.page_size)
-      .limit(listTranslationDto.page_size)
-      .sort({ create_time: -1 });
+      .limit(listTranslationDto.page_size);
 
     const [data, total] = await Promise.all([
       query.lean().exec(),
