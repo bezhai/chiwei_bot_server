@@ -1,3 +1,4 @@
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsInt,
@@ -31,15 +32,18 @@ export class ListTranslationDto {
   @IsInt()
   @Min(1)
   @IsOptional()
+  @Type(() => Number)
   page: number = 1;
 
   @IsInt()
   @Min(1)
   @Max(100)
   @IsOptional()
+  @Type(() => Number)
   page_size: number = 10;
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
   only_untranslated: boolean = true;
 }

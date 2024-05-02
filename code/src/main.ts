@@ -5,9 +5,23 @@ import { CustomValidationPipe } from './common/pipe/custom-validation.pipe';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { PostCreateStatusCodeInterceptor } from './common/interceptor/post-create-status-code.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://www.yuanzhi.xyz'], // 允许的源
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的 HTTP 方法
+    allowedHeaders: [
+      'Content-Type',
+      'Dnt',
+      'Referer',
+      'User-Agent',
+      'Origin',
+      'Authorization',
+    ], // 允许的 HTTP 头
+  });
 
   app.setGlobalPrefix('api/v2');
   app.useGlobalFilters(
@@ -15,7 +29,15 @@ async function bootstrap() {
     new HttpExceptionFilter(),
   );
   app.useGlobalInterceptors(new PostCreateStatusCodeInterceptor());
-  app.useGlobalPipes(new CustomValidationPipe());
+  app.useGlobalPipes(
+    new CustomValidationPipe(),
+    new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
 
   if (process.env.ENABLE_SWAGGER === 'true') {
     const options = new DocumentBuilder()

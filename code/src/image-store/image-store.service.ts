@@ -1,7 +1,5 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
-import { CreateImageStoreDto } from './dto/create-image-store.dto';
-import { UpdateImageStoreDto } from './dto/update-image-store.dto';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { PixivImage } from './schemas/pixiv-image.schemas';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProxyService } from 'src/proxy/proxy.service';
@@ -9,7 +7,11 @@ import * as dayjs from 'dayjs';
 import { OssService } from 'src/database/oss/oss.service';
 import { LarkService } from 'src/lark/lark.service';
 import { resizeImage } from 'src/common/utils/image-resize.utils';
-import { ListPixivImageDto, StatusMode } from './dto/image-store.dto';
+import {
+  ListPixivImageDto,
+  StatusMode,
+  UpdateStatusDto,
+} from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import { ImageUrl, PixivImageWithUrl } from './responses/image-store.responses';
 
@@ -22,8 +24,31 @@ export class ImageStoreService {
     private readonly proxyService: ProxyService,
     private readonly larkService: LarkService,
   ) {}
-  create(createImageStoreDto: CreateImageStoreDto) {
-    return `This action adds a new imageStore, ${createImageStoreDto.illust_id}`;
+
+  async updateStatus(updateStatusDto: UpdateStatusDto) {
+    const update: UpdateQuery<PixivImage> = {};
+
+    switch (updateStatusDto.status) {
+      case StatusMode.DELETE:
+        update.del_flag = true;
+        break;
+      case StatusMode.VISIBLE:
+        update.visible = true;
+        break;
+      case StatusMode.NO_VISIBLE:
+        update.visible = false;
+        break;
+    }
+
+    const result = await this.pixivImageModel.updateMany(
+      {
+        pixiv_addr: { $in: updateStatusDto.pixiv_addr },
+      },
+      {
+        $set: update,
+      },
+    );
+    console.log(result);
   }
 
   async findAll(
@@ -136,18 +161,6 @@ export class ImageStoreService {
       ...paginationResponse,
       data: imagesWithUrls,
     });
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} imageStore`;
-  }
-
-  update(id: number, updateImageStoreDto: UpdateImageStoreDto) {
-    return `This action updates a #${id} imageStore, ${updateImageStoreDto.illust_id}`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} imageStore`;
   }
 
   async downloadImage(pixivUrl: string) {

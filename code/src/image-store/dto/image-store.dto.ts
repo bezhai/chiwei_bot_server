@@ -1,3 +1,4 @@
+import { Transform, Type } from 'class-transformer';
 import {
   IsOptional,
   IsString,
@@ -17,6 +18,11 @@ export enum StatusMode {
   NO_VISIBLE = 4,
 }
 
+export type UpdateStatusMode =
+  | StatusMode.DELETE
+  | StatusMode.VISIBLE
+  | StatusMode.NO_VISIBLE;
+
 export class ListPixivImageDto {
   @IsOptional()
   @IsString()
@@ -33,24 +39,37 @@ export class ListPixivImageDto {
 
   @IsEnum(StatusMode)
   @IsOptional()
+  @Type(() => Number)
   status: StatusMode = StatusMode.VISIBLE;
 
   @IsInt()
   @Min(1)
   @IsOptional()
+  @Type(() => Number)
   page: number = 1;
 
   @IsInt()
   @Min(1)
   @Max(100)
   @IsOptional()
+  @Type(() => Number)
   page_size: number = 10;
 
   @IsOptional()
   @IsInt()
+  @Type(() => Number)
   illust_id?: number;
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
   random_mode?: boolean;
+}
+
+export class UpdateStatusDto {
+  @IsArray()
+  @IsString({ each: true })
+  pixiv_addr: string[];
+
+  status: UpdateStatusMode;
 }
