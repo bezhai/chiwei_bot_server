@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://www.yuanzhi.xyz'], // 允许的源
+    origin: [process.env.DOMAIN_NAME || ''], // 允许的源
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的 HTTP 方法
     allowedHeaders: [
       'Content-Type',

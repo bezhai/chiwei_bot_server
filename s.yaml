@@ -41,6 +41,7 @@ resources:
         MYSQL_ROOT_PASSWORD: ${env(MYSQL_ROOT_PASSWORD)}
         MYSQL_HOST: ${env(MYSQL_HOST)}
         MYSQL_DBNAME: ${env(MYSQL_DBNAME)}
+        DOMAIN_NAME: ${env(DOMAIN_NAME)}
       customRuntimeConfig:
         command:
           - ./bootstrap

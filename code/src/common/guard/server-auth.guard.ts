@@ -14,7 +14,7 @@ export class ServerAuthGuard implements CanActivate {
   private readonly secret: string;
 
   constructor(private configService: ConfigService) {
-    this.secret = this.configService.get<string>('HTTP_SECRET_KEY') || '';
+    this.secret = this.configService.get<string>('HTTP_SECRET') || '';
   }
 
   canActivate(
