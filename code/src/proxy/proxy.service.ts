@@ -3,6 +3,7 @@ import { ProxyRequestDto } from './dto/proxy-request.dto';
 import { HttpService } from '@nestjs/axios';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
+import { url } from 'inspector';
 
 @Injectable()
 export class ProxyService {
@@ -19,13 +20,23 @@ export class ProxyService {
       'sec-ch-ua': await this.getValueFromRedis('sec-ch-ua'),
       'sec-ch-ua-mobile': '?0',
       'sec-ch-ua-platform': 'macOS',
-      ...proxyRequestDto.headers,
     };
     return headers;
   }
 
   async proxyRequest(proxyRequestDto: ProxyRequestDto): Promise<any> {
     const headers = await this.buildHeaders(proxyRequestDto);
+
+    if (proxyRequestDto.debug) {
+      console.log('headers', headers);
+      return {
+        body: {
+          url: proxyRequestDto.url,
+          headers,
+        },
+        headers,
+      };
+    }
 
     const response = await this.httpService
       .get(proxyRequestDto.url, { headers })
