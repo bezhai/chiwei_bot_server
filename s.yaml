@@ -1,9 +1,9 @@
 edition: 3.0.0
-name: chiwei-bot-server
+name: chiwei-web-server
 access: 'undefined'
 vars:
   region: 'cn-hongkong'
-  functionName: 'chiwei-bot-server'
+  functionName: 'chiwei-web-server'
 resources:
   framework:
     component: fc3
