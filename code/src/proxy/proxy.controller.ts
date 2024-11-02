@@ -27,6 +27,7 @@ export class ProxyController {
       });
       res.send(body);
     } catch (error) {
+      console.error(error);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send((error as Error).message);
