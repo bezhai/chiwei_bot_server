@@ -45,9 +45,9 @@ export class ImageStoreController {
   }
 
   @TokenAuth()
-  @Get('/token-auth-list')
+  @Post('/token-auth-list')
   findAllWithTokenAuth(
-    @Query()
+    @Body()
     listPixivImageDto: ListPixivImageDto,
   ): Promise<PaginationResponse<ImageForLark>> {
     return this.imageStoreService.findAllForLark(listPixivImageDto);
