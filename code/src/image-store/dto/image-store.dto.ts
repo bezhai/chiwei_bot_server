@@ -8,6 +8,7 @@ import {
   Min,
   Max,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 
 export enum StatusMode {
@@ -66,9 +67,12 @@ export class ListPixivImageDto {
   random_mode?: boolean;
 
   @IsOptional()
-  @IsInt({
-    message: 'start_time must be a valid Unix timestamp (in milliseconds)',
-  })
+  @IsNumber(
+    {},
+    {
+      message: 'start_time must be a valid Unix timestamp (in milliseconds)',
+    },
+  )
   @Transform(({ value }) => new Date(value))
   start_time?: Date;
 }
