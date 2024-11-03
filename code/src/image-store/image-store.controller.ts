@@ -22,7 +22,7 @@ export class ImageStoreController {
   }
 
   @JwtGuard()
-  @Post('update-status')
+  @Post('/update-status')
   async updateStatus(@Body() updateStatusDto: UpdateStatusDto) {
     return this.imageStoreService.updateStatus(updateStatusDto);
   }
@@ -39,5 +39,14 @@ export class ImageStoreController {
     return this.imageStoreService.uploadImageToLark(
       uploadImageToLarkDto.pixiv_addr,
     );
+  }
+
+  @TokenAuth()
+  @Get('/token-auth-list')
+  findAllWithTokenAuth(
+    @Query()
+    listPixivImageDto: ListPixivImageDto,
+  ): Promise<PaginationResponse<PixivImageWithUrl>> {
+    return this.imageStoreService.findAllWithUrls(listPixivImageDto);
   }
 }

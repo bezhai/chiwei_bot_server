@@ -101,6 +101,12 @@ export class ImageStoreService {
         break;
     }
 
+    if (listPixivImageDto.start_time) {
+      filters.push({
+        create_time: { $gte: listPixivImageDto.start_time },
+      });
+    }
+
     const query = this.pixivImageModel.find(
       filters.length ? { $and: filters } : {},
     );

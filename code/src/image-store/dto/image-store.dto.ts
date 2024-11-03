@@ -64,6 +64,13 @@ export class ListPixivImageDto {
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
   random_mode?: boolean;
+
+  @IsOptional()
+  @IsInt({
+    message: 'start_time must be a valid Unix timestamp (in milliseconds)',
+  })
+  @Transform(({ value }) => new Date(value))
+  start_time?: Date;
 }
 
 export class UpdateStatusDto {
