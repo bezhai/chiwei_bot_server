@@ -5,7 +5,10 @@ import { TokenAuth } from 'src/common/decorator/auth.decorator';
 import { UploadImageToLarkDto } from './dto/upload-image.dto';
 import { ListPixivImageDto, UpdateStatusDto } from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
-import { PixivImageWithUrl } from './responses/image-store.responses';
+import {
+  ImageForLark,
+  PixivImageWithUrl,
+} from './responses/image-store.responses';
 import { JwtGuard } from 'src/common/decorator/jwt.decorator';
 
 @Controller('/image-store')
@@ -46,7 +49,7 @@ export class ImageStoreController {
   findAllWithTokenAuth(
     @Query()
     listPixivImageDto: ListPixivImageDto,
-  ): Promise<PaginationResponse<PixivImageWithUrl>> {
-    return this.imageStoreService.findAllWithUrls(listPixivImageDto);
+  ): Promise<PaginationResponse<ImageForLark>> {
+    return this.imageStoreService.findAllForLark(listPixivImageDto);
   }
 }

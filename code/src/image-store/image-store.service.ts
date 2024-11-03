@@ -13,7 +13,11 @@ import {
   UpdateStatusDto,
 } from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
-import { ImageUrl, PixivImageWithUrl } from './responses/image-store.responses';
+import {
+  ImageForLark,
+  ImageUrl,
+  PixivImageWithUrl,
+} from './responses/image-store.responses';
 
 @Injectable()
 export class ImageStoreService {
@@ -169,6 +173,25 @@ export class ImageStoreService {
     });
   }
 
+  async findAllForLark(
+    listPixivImageDto: ListPixivImageDto,
+  ): Promise<PaginationResponse<ImageForLark>> {
+    const paginationResponse = await this.findAll(listPixivImageDto);
+    const images = await Promise.all(
+      paginationResponse.data.map(async (image) => {
+        if (!!image.image_key) {
+          return { ...image };
+        }
+        const uploadResp = await this.uploadImageToLark(image.pixiv_addr);
+        return { ...image, ...uploadResp };
+      }),
+    );
+    return new PaginationResponse<ImageForLark>({
+      ...paginationResponse,
+      data: images,
+    });
+  }
+
   async downloadImage(pixivUrl: string) {
     const fileName = pixivUrl.split('/').pop();
     if (!fileName) {
@@ -236,6 +259,6 @@ export class ImageStoreService {
       { pixiv_addr: pixivAddr },
       { image_key: imageKey, width: imgWidth, height: imgHeight },
     );
-    return imageKey;
+    return { image_key: imageKey, width: imgWidth, height: imgHeight };
   }
 }
