@@ -107,7 +107,7 @@ export class ImageStoreService {
 
     if (listPixivImageDto.start_time) {
       filters.push({
-        create_time: { $gte: listPixivImageDto.start_time },
+        create_time: { $gte: new Date(listPixivImageDto.start_time) },
       });
     }
 

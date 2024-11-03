@@ -73,8 +73,7 @@ export class ListPixivImageDto {
       message: 'start_time must be a valid Unix timestamp (in milliseconds)',
     },
   )
-  @Transform(({ value }) => new Date(value))
-  start_time?: Date;
+  start_time?: number;
 }
 
 export class UpdateStatusDto {
