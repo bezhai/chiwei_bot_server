@@ -254,6 +254,16 @@ export class ImageStoreService {
     const { outFile, imgWidth, imgHeight } = await resizeImage(
       imageFile.content,
     );
+
+    console.log(
+      'imgWidth',
+      imgWidth,
+      'imgHeight',
+      imgHeight,
+      'outFile',
+      outFile.length,
+    );
+
     const imageKey = await this.larkService.uploadImage(outFile);
     await this.pixivImageModel.updateOne(
       { pixiv_addr: pixivAddr },
