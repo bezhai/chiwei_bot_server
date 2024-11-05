@@ -232,7 +232,9 @@ export class ImageStoreService {
       // TOS 未上传
       return;
     }
-    const imageFile = await this.ossService.getFile(imageInfo.tos_file_name);
+    const imageFile = await this.innerOssService.getFile(
+      imageInfo.tos_file_name,
+    );
     if (!imageFile) {
       throw new HttpException('Image not found in tos', 400);
     }

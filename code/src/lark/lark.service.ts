@@ -1,6 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import * as lark from '@larksuiteoapi/node-sdk';
 import { ConfigService } from '@nestjs/config';
+import { ReadStream } from 'fs';
+import { Readable } from 'stream';
 
 @Injectable()
 export class LarkService {
@@ -14,19 +16,11 @@ export class LarkService {
   }
 
   async uploadImage(file: Buffer): Promise<string> {
-    console.log('File info:', {
-      isBuffer: Buffer.isBuffer(file),
-      type: typeof file,
-      constructor: file?.constructor?.name,
-      length: file?.length,
-      // 如果是Buffer，打印前20个字节
-      preview: Buffer.isBuffer(file) ? file.slice(0, 20) : null,
-    });
     try {
       const response = await this.larkClient.im.image.create({
         data: {
           image_type: 'message',
-          image: file,
+          image: Readable.from(file) as ReadStream,
         },
       });
       return response?.image_key || '';
