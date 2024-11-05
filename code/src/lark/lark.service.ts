@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import * as lark from '@larksuiteoapi/node-sdk';
 import { ConfigService } from '@nestjs/config';
 
@@ -14,12 +14,17 @@ export class LarkService {
   }
 
   async uploadImage(file: Buffer): Promise<string> {
-    const response = await this.larkClient.im.image.create({
-      data: {
-        image_type: 'message',
-        image: file,
-      },
-    });
-    return response?.image_key || '';
+    try {
+      const response = await this.larkClient.im.image.create({
+        data: {
+          image_type: 'message',
+          image: file,
+        },
+      });
+      return response?.image_key || '';
+    } catch (error) {
+      console.error('Error stack:', error.stack);
+      throw new HttpException('upload img fail', 500);
+    }
   }
 }
