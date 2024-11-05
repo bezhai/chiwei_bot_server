@@ -8,6 +8,7 @@ import { PaginationResponse } from 'src/common/responses/pagination-response';
 import {
   ImageForLark,
   PixivImageWithUrl,
+  UploadLarkResp,
 } from './responses/image-store.responses';
 import { JwtGuard } from 'src/common/decorator/jwt.decorator';
 
@@ -38,7 +39,9 @@ export class ImageStoreController {
 
   @TokenAuth()
   @Post('/upload-lark')
-  async uploadImageToLark(@Body() uploadImageToLarkDto: UploadImageToLarkDto) {
+  async uploadImageToLark(
+    @Body() uploadImageToLarkDto: UploadImageToLarkDto,
+  ): Promise<UploadLarkResp | undefined> {
     return this.imageStoreService.uploadImageToLark(
       uploadImageToLarkDto.pixiv_addr,
     );
@@ -50,6 +53,6 @@ export class ImageStoreController {
     @Body()
     listPixivImageDto: ListPixivImageDto,
   ): Promise<PaginationResponse<ImageForLark>> {
-    return this.imageStoreService.findAllForLark(listPixivImageDto);
+    return this.imageStoreService.findAllSimple(listPixivImageDto);
   }
 }

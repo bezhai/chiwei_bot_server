@@ -173,23 +173,10 @@ export class ImageStoreService {
     });
   }
 
-  async findAllForLark(
+  async findAllSimple(
     listPixivImageDto: ListPixivImageDto,
   ): Promise<PaginationResponse<ImageForLark>> {
-    const paginationResponse = await this.findAll(listPixivImageDto);
-    const images = await Promise.all(
-      paginationResponse.data.map(async (image) => {
-        if (!!image.image_key) {
-          return { ...image };
-        }
-        const uploadResp = await this.uploadImageToLark(image.pixiv_addr);
-        return { ...image, ...uploadResp };
-      }),
-    );
-    return new PaginationResponse<ImageForLark>({
-      ...paginationResponse,
-      data: images,
-    });
+    return await this.findAll(listPixivImageDto);
   }
 
   async downloadImage(pixivUrl: string) {

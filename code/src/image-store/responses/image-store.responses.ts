@@ -8,8 +8,11 @@ export class ImageUrl {
 export type PixivImageWithUrl = PixivImage & ImageUrl;
 
 export class ImageForLark {
-  image_key?: string;
   pixiv_addr: string;
+}
+
+export class UploadLarkResp {
+  image_key?: string;
   width?: number;
   height?: number;
 }
