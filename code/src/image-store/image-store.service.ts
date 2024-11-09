@@ -119,7 +119,7 @@ export class ImageStoreService {
       query
         .skip((listPixivImageDto.page - 1) * listPixivImageDto.page_size)
         .limit(listPixivImageDto.page_size)
-        .sort({ create_time: -1 });
+        .sort({ pixiv_addr: -1, create_time: -1 });
     }
 
     const [images, total] = await Promise.all([
