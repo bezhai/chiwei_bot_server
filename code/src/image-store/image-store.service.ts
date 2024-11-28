@@ -123,7 +123,7 @@ export class ImageStoreService extends BaseService {
       filters.length ? { $and: filters } : {},
     );
 
-    const explainedQuery = await query.explain('executionStats');
+    const explainedQuery = await query.clone().explain('executionStats');
     this.logger.log(
       'Query Explanation:',
       JSON.stringify(explainedQuery, null, 2),
