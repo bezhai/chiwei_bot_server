@@ -18,16 +18,19 @@ import {
   ImageUrl,
   PixivImageWithUrl,
 } from './responses/image-store.responses';
+import { BaseService } from 'src/core/base.service';
 
 @Injectable()
-export class ImageStoreService {
+export class ImageStoreService extends BaseService {
   constructor(
     @Inject('OSS_CLIENT_INTERNAL') private readonly innerOssService: OssService,
     @Inject('OSS_CLIENT_EXTERNAL') private readonly ossService: OssService,
     @InjectModel(PixivImage.name) private pixivImageModel: Model<PixivImage>,
     private readonly proxyService: ProxyService,
     private readonly larkService: LarkService,
-  ) {}
+  ) {
+    super();
+  }
 
   async updateStatus(updateStatusDto: UpdateStatusDto) {
     const update: UpdateQuery<PixivImage> = {};
@@ -76,7 +79,12 @@ export class ImageStoreService {
       listPixivImageDto.tags.forEach((tag) => {
         filters.push({
           multi_tags: {
-            $elemMatch: { translation: { $regex: tag, $options: 'i' } },
+            $elemMatch: {
+              $or: [
+                { translation: { $regex: tag, $options: 'i' } },
+                { name: { $regex: tag, $options: 'i' } },
+              ],
+            },
           },
         });
       });
@@ -113,6 +121,12 @@ export class ImageStoreService {
 
     const query = this.pixivImageModel.find(
       filters.length ? { $and: filters } : {},
+    );
+
+    const explainedQuery = await query.explain('executionStats');
+    this.logger.log(
+      'Query Explanation:',
+      JSON.stringify(explainedQuery, null, 2),
     );
 
     if (!listPixivImageDto.random_mode) {
