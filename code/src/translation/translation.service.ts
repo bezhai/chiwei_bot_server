@@ -9,6 +9,7 @@ import { TranslateWord } from './schemas/translation.schemas';
 import { FilterQuery, Model } from 'mongoose';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import { BaseService } from 'src/core/base.service';
+import { DeleteResult } from 'mongodb';
 
 @Injectable()
 export class TranslationService extends BaseService {
@@ -18,10 +19,22 @@ export class TranslationService extends BaseService {
   ) {
     super();
   }
-  async deleteTranslation(deleteTranslationDto: DeleteTranslationDto) {
-    this.translateWordModel.deleteOne({
+  async deleteTranslation(
+    deleteTranslationDto: DeleteTranslationDto,
+  ): Promise<DeleteResult> {
+    const result = await this.translateWordModel.deleteOne({
       origin: deleteTranslationDto.origin,
     });
+
+    this.logger.log(`Delete operation result: ${JSON.stringify(result)}`);
+
+    if (result.deletedCount === 0) {
+      this.logger.warn(
+        `No document found with origin: ${deleteTranslationDto.origin}`,
+      );
+    }
+
+    return result;
   }
   async updateTranslation(updateTranslationDto: UpdateTranslationDto) {
     this.logger.debug(`Received DTO: ${JSON.stringify(updateTranslationDto)}`);
