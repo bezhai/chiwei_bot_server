@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   DeleteTranslationDto,
   ListTranslationDto,
@@ -8,9 +8,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { TranslateWord } from './schemas/translation.schemas';
 import { FilterQuery, Model } from 'mongoose';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
+import { WithLogger } from 'src/common/decorator/with-logger.decorator';
 
 @Injectable()
+@WithLogger()
 export class TranslationService {
+  private logger!: Logger; // 声明 logger 属性，但是由WithLogger去初始化, 这里是为了ts的类型能正常识别
+
   constructor(
     @InjectModel(TranslateWord.name)
     private readonly translateWordModel: Model<TranslateWord>,
@@ -21,10 +25,10 @@ export class TranslationService {
     });
   }
   async updateTranslation(updateTranslationDto: UpdateTranslationDto) {
-    this.translateWordModel.updateOne(
-      {
-        origin: updateTranslationDto.origin,
-      },
+    this.logger.debug(`Received DTO: ${JSON.stringify(updateTranslationDto)}`);
+
+    const result = await this.translateWordModel.updateMany(
+      { origin: updateTranslationDto.origin },
       {
         $set: {
           translation: updateTranslationDto.translation,
@@ -32,6 +36,9 @@ export class TranslationService {
         },
       },
     );
+
+    this.logger.log(`Update result: ${JSON.stringify(result)}`);
+    return result;
   }
   async getAllTranslation(
     listTranslationDto: ListTranslationDto,
