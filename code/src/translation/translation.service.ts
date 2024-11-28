@@ -26,7 +26,10 @@ export class TranslationService {
         origin: updateTranslationDto.origin,
       },
       {
-        translation: updateTranslationDto.translation,
+        $set: {
+          translation: updateTranslationDto.translation,
+          has_translate: true,
+        },
       },
     );
   }
