@@ -75,6 +75,15 @@ export class ImageStoreService extends BaseService {
       });
     }
 
+    if (
+      listPixivImageDto.pixiv_addrs &&
+      listPixivImageDto.pixiv_addrs.length > 0
+    ) {
+      filters.push({
+        pixiv_addr: { $in: listPixivImageDto.pixiv_addrs },
+      });
+    }
+
     if (listPixivImageDto.tags) {
       listPixivImageDto.tags.forEach((tag) => {
         filters.push({

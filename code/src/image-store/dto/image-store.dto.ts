@@ -74,6 +74,10 @@ export class ListPixivImageDto {
     },
   )
   start_time?: number;
+
+  @IsOptional()
+  @IsArray()
+  pixiv_addrs?: string[];
 }
 
 export class UpdateStatusDto {
