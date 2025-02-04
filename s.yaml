@@ -42,6 +42,7 @@ resources:
         MYSQL_HOST: ${env(MYSQL_HOST)}
         MYSQL_DBNAME: ${env(MYSQL_DBNAME)}
         DOMAIN_NAME: ${env(DOMAIN_NAME)}
+        AI302_BEARER_TOKEN: ${env(AI302_BEARER_TOKEN)}
       customRuntimeConfig:
         command:
           - ./bootstrap

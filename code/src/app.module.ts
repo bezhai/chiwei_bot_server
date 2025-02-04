@@ -17,6 +17,7 @@ import { ProxyModule } from './proxy/proxy.module';
 import { OssModule } from './database/oss/oss.module';
 import { LarkModule } from './lark/lark.module';
 import { TranslationModule } from './translation/translation.module';
+import { LarkFileTransferModule } from './lark-file-transfer/lark-file-transfer.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { TranslationModule } from './translation/translation.module';
     OssModule,
     LarkModule,
     TranslationModule,
+    LarkFileTransferModule,
   ],
   controllers: [AppController],
   providers: [
