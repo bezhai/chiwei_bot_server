@@ -38,6 +38,11 @@ export class ListPixivImageDto {
   @IsString({ each: true })
   tags?: string[];
 
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tag_and_author?: string[];
+
   @IsEnum(StatusMode)
   @IsOptional()
   @Type(() => Number)

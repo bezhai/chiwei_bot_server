@@ -99,6 +99,21 @@ export class ImageStoreService extends BaseService {
       });
     }
 
+    if (listPixivImageDto.tag_and_author) {
+      listPixivImageDto.tag_and_author.forEach((tagAndAuthor) => {
+        filters.push({
+          $or: [
+            {
+              multi_tags: {
+                $elemMatch: { $regex: tagAndAuthor, $options: 'i' },
+              },
+            },
+            { author: { $regex: tagAndAuthor, $options: 'i' } },
+          ],
+        });
+      });
+    }
+
     if (listPixivImageDto.author_id && listPixivImageDto.author_id !== '') {
       filters.push({
         author_id: { $regex: listPixivImageDto.author_id, $options: 'i' },
