@@ -105,7 +105,12 @@ export class ImageStoreService extends BaseService {
           $or: [
             {
               multi_tags: {
-                $elemMatch: { $regex: tagAndAuthor, $options: 'i' },
+                $elemMatch: {
+                  $or: [
+                    { translation: { $regex: tagAndAuthor, $options: 'i' } },
+                    { name: { $regex: tagAndAuthor, $options: 'i' } },
+                  ],
+                },
               },
             },
             { author: { $regex: tagAndAuthor, $options: 'i' } },
