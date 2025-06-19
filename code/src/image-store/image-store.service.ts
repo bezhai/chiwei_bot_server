@@ -301,4 +301,31 @@ export class ImageStoreService extends BaseService {
     );
     return { image_key: imageKey, width: imgWidth, height: imgHeight };
   }
+
+  async updateAllTranslate(origin: string, translate: string) {
+    // 更新所有包含指定原文的标签翻译
+    const result = await this.pixivImageModel.updateMany(
+      {
+        'multi_tags.name': origin,
+        del_flag: false, // 只更新未删除的记录
+      },
+      {
+        $set: {
+          'multi_tags.$.translation': translate,
+          update_time: new Date(),
+        },
+      },
+    );
+
+    this.logger.log(
+      `Updated translation for "${origin}" to "${translate}". Modified ${result.modifiedCount} documents.`,
+    );
+
+    return {
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount,
+      origin,
+      translate,
+    };
+  }
 }

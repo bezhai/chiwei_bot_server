@@ -18,5 +18,6 @@ import { LarkModule } from 'src/lark/lark.module';
   ],
   controllers: [ImageStoreController],
   providers: [ImageStoreService],
+  exports: [ImageStoreService],
 })
 export class ImageStoreModule {}

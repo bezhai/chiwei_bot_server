@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import {
   DeleteTranslationDto,
   ListTranslationDto,
@@ -10,12 +10,15 @@ import { FilterQuery, Model } from 'mongoose';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import { BaseService } from 'src/core/base.service';
 import { DeleteResult } from 'mongodb';
+import { ImageStoreService } from 'src/image-store/image-store.service';
 
 @Injectable()
 export class TranslationService extends BaseService {
   constructor(
     @InjectModel(TranslateWord.name)
     private readonly translateWordModel: Model<TranslateWord>,
+    @Inject(forwardRef(() => ImageStoreService))
+    private readonly imageStoreService: ImageStoreService,
   ) {
     super();
   }
@@ -36,6 +39,7 @@ export class TranslationService extends BaseService {
 
     return result;
   }
+
   async updateTranslation(updateTranslationDto: UpdateTranslationDto) {
     this.logger.debug(`Received DTO: ${JSON.stringify(updateTranslationDto)}`);
 
@@ -50,8 +54,20 @@ export class TranslationService extends BaseService {
     );
 
     this.logger.log(`Update result: ${JSON.stringify(result)}`);
+
+    // 不要阻塞返回，异步更新所有图片的翻译
+    this.imageStoreService
+      .updateAllTranslate(
+        updateTranslationDto.origin,
+        updateTranslationDto.translation,
+      )
+      .then((res) => {
+        this.logger.log(`Update all translate result: ${JSON.stringify(res)}`);
+      });
+
     return result;
   }
+
   async getAllTranslation(
     listTranslationDto: ListTranslationDto,
   ): Promise<PaginationResponse<TranslateWord>> {
