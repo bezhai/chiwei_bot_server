@@ -302,6 +302,31 @@ export class ImageStoreService extends BaseService {
     return { image_key: imageKey, width: imgWidth, height: imgHeight };
   }
 
+  async reportLarkUpload(
+    pixivAddr: string,
+    imageKey: string,
+    width: number,
+    height: number,
+  ) {
+    const imageInfo = await this.pixivImageModel.findOne({
+      pixiv_addr: pixivAddr,
+    });
+
+    if (!imageInfo) {
+      throw new HttpException('Image not found in mongodb', 400);
+    }
+
+    await this.pixivImageModel.updateOne(
+      { pixiv_addr: pixivAddr },
+      { image_key: imageKey, width: width, height: height },
+    );
+
+    return {
+      success: true,
+      message: 'Lark upload info reported successfully',
+    };
+  }
+
   async updateAllTranslate(origin: string, translate: string) {
     // 更新所有包含指定原文的标签翻译
     const result = await this.pixivImageModel.updateMany(

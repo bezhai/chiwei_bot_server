@@ -3,6 +3,7 @@ import { ImageStoreService } from './image-store.service';
 import { DownloadImageDto } from './dto/download-image.dto';
 import { TokenAuth } from 'src/common/decorator/auth.decorator';
 import { UploadImageToLarkDto } from './dto/upload-image.dto';
+import { ReportLarkUploadDto } from './dto/report-lark-upload.dto';
 import { ListPixivImageDto, UpdateStatusDto } from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import {
@@ -54,5 +55,16 @@ export class ImageStoreController {
     listPixivImageDto: ListPixivImageDto,
   ): Promise<PaginationResponse<ImageForLark>> {
     return this.imageStoreService.findAllSimple(listPixivImageDto);
+  }
+
+  @TokenAuth()
+  @Post('/report-lark-upload')
+  async reportLarkUpload(@Body() reportLarkUploadDto: ReportLarkUploadDto) {
+    return this.imageStoreService.reportLarkUpload(
+      reportLarkUploadDto.pixiv_addr,
+      reportLarkUploadDto.image_key,
+      reportLarkUploadDto.width,
+      reportLarkUploadDto.height,
+    );
   }
 }
