@@ -3,6 +3,7 @@ import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { PixivImage } from './schemas/pixiv-image.schemas';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProxyService } from 'src/proxy/proxy.service';
+import { PixivAuth } from 'src/proxy/dto/proxy-request.dto';
 import * as dayjs from 'dayjs';
 import { OssService } from 'src/database/oss/oss.service';
 import { LarkService } from 'src/lark/lark.service';
@@ -222,7 +223,7 @@ export class ImageStoreService extends BaseService {
     return await this.findAll(listPixivImageDto);
   }
 
-  async downloadImage(pixivUrl: string) {
+  async downloadImage(pixivUrl: string, pixivAuth?: PixivAuth) {
     const fileName = pixivUrl.split('/').pop();
     if (!fileName) {
       throw new HttpException('Invalid pixiv URL', 400);
@@ -243,6 +244,7 @@ export class ImageStoreService extends BaseService {
     const buffer = await this.proxyService.proxyRequestBuffer({
       url: pixivUrl,
       referer: `https://www.pixiv.net/artworks/${illustId}`,
+      pixiv_auth: pixivAuth,
     });
 
     const tosFileName = `pixiv_img_v2/${dayjs().format('YYYYMMDD')}/${fileName}`;

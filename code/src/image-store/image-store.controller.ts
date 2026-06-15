@@ -35,7 +35,10 @@ export class ImageStoreController {
   @TokenAuth()
   @Post('/download')
   async downloadImage(@Body() downloadImageDto: DownloadImageDto) {
-    return this.imageStoreService.downloadImage(downloadImageDto.pixiv_url);
+    return this.imageStoreService.downloadImage(
+      downloadImageDto.pixiv_url,
+      downloadImageDto.pixiv_auth,
+    );
   }
 
   @TokenAuth()
