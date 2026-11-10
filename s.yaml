@@ -24,25 +24,11 @@ resources:
         - acs:fc:${vars.region}:official:layers/Nodejs18/versions/3
       environmentVariables:
         PATH: '/opt/nodejs18/bin:/bin'
-        END_POINT: ${env(END_POINT)}
         INTERNAL_END_POINT: ${env(INTERNAL_END_POINT)}
-        LARK_APP_ID: ${env(LARK_APP_ID)}
-        LARK_APP_SECRET: ${env(LARK_APP_SECRET)}
-        MONGO_INITDB_ROOT_PASSWORD: ${env(MONGO_INITDB_ROOT_PASSWORD)}
-        MONGO_INITDB_ROOT_USERNAME: ${env(MONGO_INITDB_ROOT_USERNAME)}
-        MONGO_HOST: ${env(MONGO_HOST)}
         OSS_ACCESS_KEY_ID: ${env(OSS_ACCESS_KEY_ID)}
         OSS_ACCESS_KEY_SECRET: ${env(OSS_ACCESS_KEY_SECRET)}
         OSS_BUCKET: ${env(OSS_BUCKET)}
-        REDIS_PASSWORD: ${env(REDIS_PASSWORD)}
-        REDIS_HOST: ${env(REDIS_HOST)}
         HTTP_SECRET: ${env(HTTP_SECRET)}
-        HTTP_JWT_KEY: ${env(HTTP_JWT_KEY)}
-        MYSQL_ROOT_PASSWORD: ${env(MYSQL_ROOT_PASSWORD)}
-        MYSQL_HOST: ${env(MYSQL_HOST)}
-        MYSQL_DBNAME: ${env(MYSQL_DBNAME)}
-        DOMAIN_NAME: ${env(DOMAIN_NAME)}
-        AI302_BEARER_TOKEN: ${env(AI302_BEARER_TOKEN)}
       customRuntimeConfig:
         command:
           - ./bootstrap

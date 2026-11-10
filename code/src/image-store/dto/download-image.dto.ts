@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDefined,
+  IsNotEmpty,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { PixivAuth } from 'src/proxy/dto/proxy-request.dto';
 
 export class DownloadImageDto {
@@ -6,6 +13,9 @@ export class DownloadImageDto {
   @IsNotEmpty()
   pixiv_url: string;
 
-  // 调用方带入的 pixiv 鉴权头，透传给 proxyRequestBuffer（缺失则 server 回退 Redis）。
-  pixiv_auth?: PixivAuth;
+  @IsDefined()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => PixivAuth)
+  pixiv_auth: PixivAuth;
 }
