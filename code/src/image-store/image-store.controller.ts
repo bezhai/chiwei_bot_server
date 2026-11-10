@@ -7,6 +7,7 @@ import { ReportLarkUploadDto } from './dto/report-lark-upload.dto';
 import { ListPixivImageDto, UpdateStatusDto } from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import {
+  DownloadImageResp,
   ImageForLark,
   PixivImageWithUrl,
   UploadLarkResp,
@@ -34,7 +35,9 @@ export class ImageStoreController {
 
   @TokenAuth()
   @Post('/download')
-  async downloadImage(@Body() downloadImageDto: DownloadImageDto) {
+  async downloadImage(
+    @Body() downloadImageDto: DownloadImageDto,
+  ): Promise<DownloadImageResp> {
     return this.imageStoreService.downloadImage(
       downloadImageDto.pixiv_url,
       downloadImageDto.pixiv_auth,

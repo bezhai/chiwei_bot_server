@@ -15,6 +15,7 @@ import {
 } from './dto/image-store.dto';
 import { PaginationResponse } from 'src/common/responses/pagination-response';
 import {
+  DownloadImageResp,
   ImageForLark,
   ImageUrl,
   PixivImageWithUrl,
@@ -223,7 +224,10 @@ export class ImageStoreService extends BaseService {
     return await this.findAll(listPixivImageDto);
   }
 
-  async downloadImage(pixivUrl: string, pixivAuth?: PixivAuth) {
+  async downloadImage(
+    pixivUrl: string,
+    pixivAuth?: PixivAuth,
+  ): Promise<DownloadImageResp> {
     const fileName = pixivUrl.split('/').pop();
     if (!fileName) {
       throw new HttpException('Invalid pixiv URL', 400);
@@ -233,12 +237,13 @@ export class ImageStoreService extends BaseService {
       throw new HttpException('Invalid illust ID', 400);
     }
 
-    const count = await this.pixivImageModel.countDocuments({
+    // 历史数据里 tos_file_name 可能是 null、缺失或空串，三种都不算已上传，只认非空字符串。
+    const existing = await this.pixivImageModel.findOne({
       pixiv_addr: fileName,
-      tos_file_name: { $ne: '' },
+      tos_file_name: { $type: 'string', $ne: '' },
     });
-    if (count > 0) {
-      return;
+    if (existing) {
+      return { tos_file_name: existing.tos_file_name };
     }
 
     const buffer = await this.proxyService.proxyRequestBuffer({
@@ -255,11 +260,21 @@ export class ImageStoreService extends BaseService {
       throw new HttpException('Failed to upload image to OSS', 500);
     }
 
-    await this.pixivImageModel.create({
-      pixiv_addr: fileName,
-      tos_file_name: tosFileName,
-      illust_id: Number(illustId),
-    });
+    // 已有记录但 key 无效（worker 的 addImage 按 pixiv_addr upsert 元数据时不写 tos_file_name）：
+    // 只补上 key，保留原有元数据。完全没有记录时才新建。
+    const updated = await this.pixivImageModel.updateOne(
+      { pixiv_addr: fileName },
+      { $set: { tos_file_name: tosFileName, update_time: new Date() } },
+    );
+    if (updated.matchedCount === 0) {
+      await this.pixivImageModel.create({
+        pixiv_addr: fileName,
+        tos_file_name: tosFileName,
+        illust_id: Number(illustId),
+      });
+    }
+
+    return { tos_file_name: tosFileName };
   }
 
   async uploadImageToLark(pixivAddr: string) {
